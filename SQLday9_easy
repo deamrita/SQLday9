@@ -1,0 +1,52 @@
+------------------Guest Or Host Kindness-------------------
+select from_type winner, round(avg(review_score),2) score
+from airbnb_reviews
+group by from_type
+order by round(avg(review_score),2) desc
+limit 1
+---------------------Sales Dept Salaries
+select first_name 
+from employee
+where department = 'Sales'
+and target > 150
+order by first_name desc
+-------------------Total AdWords Earnings
+select sum(adwords_earnings),business_type
+from google_adwords_earnings
+group by business_type;
+
+-------------------Cheapest Properties
+select X.p, X.c
+from
+(select price p,
+rank() over(partition by city order by price) as rnk,
+city c
+from airbnb_search_details)X
+where X.rnk = 1
+
+-------------------Number of Employees Per Department
+select department, count(id) 
+from employee
+group by department
+order by count(id) desc;
+
+-----------------------Not Referred Employees
+select first_name 
+from employee
+where manager_id <> 1
+
+------------Find the average score for grades A, B, and C
+select avg(score), grade
+from los_angeles_restaurant_health_inspections
+group by grade;
+
+---------------------Employees With Bonuses
+select first_name, bonus 
+from employee
+where bonus < 150;
+
+--------------------Find the number of inspections per day
+select count(serial_number),activity_date
+from los_angeles_restaurant_health_inspections
+group by activity_date
+order by activity_date;
